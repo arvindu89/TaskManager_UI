@@ -1,0 +1,63 @@
+<div class="row form-group" style="padding-top: 1rem">
+    <div *ngIf="status && showStatus" class="alert alert-success">
+        <strong>Success!</strong> Added task to the table.
+    </div>
+    <div *ngIf="!status && showStatus" class="alert alert-danger">
+        <strong>Failed!</strong> Task was not added to the table.
+    </div>
+    <div class="col-lg-2">
+        <label for="txtTask">Task:</label>
+    </div>
+    <div class="col-lg-4">
+        <input type="text" placeholder="Task" [ngModel]="task" class="form-control" id="txtTask" />
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2">
+        <label for="txtpriority">Priority:</label>
+    </div>
+    <div class="col-lg-4">
+        <input class="form-control" pInputText type="range" min="0" max="30" [(ngModel)]="priority" id="txtpriority"
+            required>
+        <label>{{priority}}</label>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2">
+        <label for="drpParent">Parent Task:</label>
+    </div>
+    <div class="col-lg-4">
+        <p-dropdown id="drpParent" [options]="parentTasks" [(ngModel)]="parentTask" [style]="{'width':'100%'}">
+        </p-dropdown>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2">
+        <label for="startDatefield">Start Date:</label>
+    </div>
+    <div class="col-lg-4">
+        <p-calendar id="startDatefield" [(ngModel)]="startDate" placeholder="Start Date" [ngStyle]="{'width':'100%'}"
+            dateFormat="dd-MM-yy"></p-calendar>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2">
+        <label for="endDatefield">End Date:</label>
+    </div>
+    <div class="col-lg-4">
+        <p-calendar id="endDatefield" [(ngModel)]="endDate" placeholder="End Date" [ngStyle]="{'width':'100%'}"
+            dateFormat="dd-MM-yy"></p-calendar>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-2">
+        <button [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}" class="form-control" pButton type="button"
+            (click)="addTask()">Add Task</button>
+    </div>
+    <div class="col-lg-2">
+        <button [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}" class="form-control" pButton type="button"
+            (click)="resetTask()">Reset</button>
+    </div>
+</div>

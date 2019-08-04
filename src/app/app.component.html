@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-md bg-light navbar-light">
+    <h3>Task Manager</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav mr-auto"></ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class='fas fa-user-alt'></i> About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="row">
+    <div style="padding-top:2rem" class="col-md-2">
+      <a [routerLink]="'add'" type="button" class="btn btn-dark">Add Task</a>
+    </div>
+    <div style="padding-top:2rem" class="col-md-2">
+      <a [routerLink]="''" type="button" class="btn btn-dark">View Task</a>
+    </div>
+    <div style="padding-top:2rem" class="col-md-8">
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>

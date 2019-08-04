@@ -1,0 +1,151 @@
+<div class="row form-group" style="padding-top: 1rem">
+    <div class="col-lg-1">
+        <label for="searchTask">Task:</label>
+    </div>
+    <div class="col-lg-2">
+        <input type="text"
+        placeholder="Search Task" [ngModel]="taskSearchTxt" class="form-control" id="searchTask" />
+    </div>
+    <div class="col-lg-1">
+        <label for="searchParentTask">Parent Task:</label>
+    </div>
+    <div class="col-lg-2">
+        <p-dropdown [options]="parentTasks" [(ngModel)]="parentTaskSearchTxt" 
+                                [style]="{'width':'100%'}"></p-dropdown>
+    </div>
+    <div class="col-lg-6"></div>
+</div>
+<div class="row form-group" style="padding-top: 1rem">
+    <div class="col-lg-1">
+        <label for="priorityFrom">Priority From:</label>
+    </div>
+    <div class="col-lg-2">
+        <input type="number" placeholder="priority From" [(ngModel)]="priorityFromSearchTxt" 
+         class="form-control" id="priorityFrom" />
+    </div>
+    <div class="col-lg-1">
+        <label for="priorityTo">Priority To:</label>
+    </div>
+    <div class="col-lg-2">
+        <input type="number" placeholder="priority To" [(ngModel)]="priorityToSearchTxt" 
+        class="form-control" id="priorityTo" />
+    </div>
+    <div class="col-lg-1">
+        <label for="startDate">Start Date:</label>
+    </div>
+    <div class="col-lg-2">
+        <p-calendar [(ngModel)]="searchStartDate" placeholder="Start Date" dateFormat="dd-MM-yy"></p-calendar>
+    </div>
+    <div class="col-lg-1">
+        <label for="endDate">End Date:</label>
+    </div>
+    <div class="col-lg-2">
+        <p-calendar [(ngModel)]="searchEndDate" placeholder="End Date" dateFormat="dd-MM-yy"></p-calendar>
+    </div>
+</div>
+
+<div class="row form-group" style="padding-top: 1rem">
+    <div class="col-lg-4">       
+    </div>
+    <div class="col-lg-2">
+        <button [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}"  
+        class="form-control" pButton type="button" (click)="taskSearch()">Search</button>
+    </div>   
+    <div class="col-lg-2">
+        <button [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}"  
+        class="form-control" pButton type="button" (click)="clearSearch()">Clear</button>
+    </div>
+    <div class="col-lg-4"></div>
+</div>
+
+<div class="row form-group" style="padding-top: 1rem">
+    <div class="col-lg-12">
+        <p-table #dt [columns]="cols" [value]="tasks" [(selection)]="selectedTask"
+            [paginator]="true" rows="10" editMode="row" dataKey="TaskID">
+            <ng-template pTemplate="caption">
+                <div style="text-align: right">        
+                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                </div>
+            </ng-template>        
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="rowData">                   
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="rowData.TaskName" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.TaskName}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="parentTasks" [(ngModel)]="rowData.ParentTaskName" 
+                                [style]="{'width':'100%'}"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.ParentTaskName}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [(ngModel)]="rowData.StartDate"  
+                                placeholder="Start Date" [ngStyle]="{'width':'100%'}" dateFormat="dd-MM-yy"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.StartDate | date: 'dd-MMM-yyyy'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [(ngModel)]="rowData.EndDate"  
+                                placeholder="End Date" [ngStyle]="{'width':'100%'}" dateFormat="dd-MM-yy"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.EndDate | date: 'dd-MMM-yyyy'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="range" min="0" max="30" [(ngModel)]="rowData.Priority" required>
+                                <label>{{rowData.Priority}}</label>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData.Priority}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td style="text-align:center">
+                        <button [disabled]="rowData.IsCompleted" [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}" 
+                        class="form-control" *ngIf="!editing" pButton type="button" 
+                        pInitEditableRow (click)="onRowEditInit(rowData)">Edit</button>
+                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" 
+                        class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" 
+                        class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)"></button>
+                        <br/><br/>
+                        <button *ngIf="!editing" [ngStyle]="{'background-color': '#D3D3D3', 'color': 'black'}" 
+                        class="form-control" [disabled]="rowData.IsCompleted" pButton type="button" 
+                        pEndTaskRow (click)="onEndTask(rowData, ri)">End Task</button>
+                    </td>
+                </tr>        
+            </ng-template>           
+        </p-table>
+    </div>
+</div>
