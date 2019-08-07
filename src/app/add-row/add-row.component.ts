@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { TaskassignmentService } from '../service/taskassignment.service';
+import { ParentTask } from '../model/parent-task';
+import { Task } from '../model/task';
 
 @Component({
   selector: 'app-add-row',
@@ -14,32 +17,34 @@ export class AddRowComponent implements OnInit {
   priority: number;
   status: boolean;
   showStatus: boolean;
+  taskObject: Task = new Task();
 
-  constructor() { }
+  constructor(private taskassignmentService: TaskassignmentService) { }
 
   ngOnInit() {
     
     this.priority = 0;
     this.status = null;
     this.showStatus = false;
-    this.parentTasks = [
-      { label: '-- Select --', value: '0' },
-      { label: 'Parent Task 1', value: 'ParentTask1' },
-      { label: 'Parent Task 2', value: 'ParentTask2' },
-      { label: 'Parent Task 3', value: 'ParentTask3' },
-      { label: 'Parent Task 4', value: 'ParentTask4' },
-      { label: 'Parent Task 5', value: 'ParentTask5' },
-      { label: 'Parent Task 6', value: 'ParentTask6' },
-      { label: 'Parent Task 7', value: 'ParentTask7' },
-      { label: 'Parent Task 8', value: 'ParentTask8' },
-      { label: 'Parent Task 9', value: 'ParentTask9' },
-      { label: 'Parent Task 10', value: 'ParentTask10' }
-    ];
+
+    this.taskassignmentService.getParentList().subscribe((data: ParentTask[]) => {
+      console.log(data);
+      this.parentTasks = data;
+    });        
+    
   }
 
   addTask() {
     this.showStatus = true;
       this.status = true;
+      this.taskObject.TaskName = this.task;
+      this.taskObject.ParentTaskName = this.parentTask;
+      this.taskObject.Priority = this.priority;
+      this.taskObject.StartDate = this.startDate;
+      this.taskObject.EndDate = this.endDate;
+      this.taskObject.IsCompleted = false;
+
+      this.taskassignmentService.postNewTask(this.taskObject).subscribe(res=> console.log(res));
   }
 
   resetTask() {

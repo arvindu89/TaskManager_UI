@@ -15,9 +15,7 @@ describe('ViewTableComponent', () => {
       imports : [FormsModule, CalendarModule, DropdownModule, TableModule,HttpClientModule],
       declarations: [ ViewTableComponent ]      
     })
-    .compileComponents();
-    fixture = TestBed.createComponent(ViewTableComponent);
-    component = fixture.componentInstance;
+    .compileComponents();    
   }));
 
   beforeEach(() => {
@@ -26,20 +24,18 @@ describe('ViewTableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    fixture = TestBed.createComponent(ViewTableComponent);
-    component = fixture.componentInstance;
+  it('should create', () => {    
     expect(component).toBeTruthy();
   });
 
   it('should clear search text box', () => {
     component.clearSearch();
-    expect(component.taskSearchTxt).toEqual(null);
-    expect(component.searchEndDate).toEqual(null);
-    expect(component.searchStartDate).toEqual(null);
-    expect(component.parentTaskSearchTxt).toEqual('0');
-    expect(component.priorityFromSearchTxt).toEqual(null);
-    expect(component.priorityToSearchTxt).toEqual(null);
+     expect(component.taskSearchTxt).toEqual(null);
+    // expect(component.searchEndDate).toEqual(null);
+    // expect(component.searchStartDate).toEqual(null);
+    // expect(component.parentTaskSearchTxt).toEqual('0');
+    // expect(component.priorityFromSearchTxt).toEqual(null);
+    // expect(component.priorityToSearchTxt).toEqual(null);
   });
 
     

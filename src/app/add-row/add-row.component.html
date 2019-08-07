@@ -1,15 +1,17 @@
-<div class="row form-group" style="padding-top: 1rem">
+<div class="row form-group" style="padding-top: 2rem">
     <div *ngIf="status && showStatus" class="alert alert-success">
         <strong>Success!</strong> Added task to the table.
     </div>
     <div *ngIf="!status && showStatus" class="alert alert-danger">
         <strong>Failed!</strong> Task was not added to the table.
     </div>
+</div>
+<div class="row form-group">
     <div class="col-lg-2">
         <label for="txtTask">Task:</label>
     </div>
     <div class="col-lg-4">
-        <input type="text" placeholder="Task" [ngModel]="task" class="form-control" id="txtTask" />
+        <input type="text" placeholder="Task" [(ngModel)]="task" class="form-control" id="txtTask" />
     </div>
 </div>
 <div class="row form-group">

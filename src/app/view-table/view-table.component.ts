@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Task } from '../model/task';
+import { ParentTask } from '../model/parent-task';
 import { TaskassignmentService } from '../service/taskassignment.service';
+import { HttpParams } from '@angular/common/http';
 
 
 @Component({
@@ -26,11 +28,16 @@ export class ViewTableComponent implements OnInit {
   constructor(private taskassignmentService: TaskassignmentService) { }
   
   ngOnInit() {
-    this.taskassignmentService.getTask().subscribe((data: Task[]) => {
-      this.tasks = data;
+    this.taskassignmentService.getTask(null).subscribe((data: Task[]) => {
+      console.log(data);
+      this.tasks = data;      
     });
 
-
+    this.taskassignmentService.getParentList().subscribe((data: ParentTask[]) => {
+      console.log(data);
+      this.parentTasks = data;
+    });
+        
     this.cols = [
       { field: 'TaskName', header: 'Task Name' },
       { field: 'ParentTaskName', header: 'ParentTaskName' },
@@ -38,22 +45,7 @@ export class ViewTableComponent implements OnInit {
       { field: 'EndDate', header: 'EndDate' },
       { field: 'Priority', header: 'Priority' },
       { field: 'IsCompleted', header: '' }
-    ];
-
-    this.parentTasks = [
-      { label: '--- Select ---', value: '0' },
-      { label: 'Parent Task 1', value: 'ParentTask1' },
-      { label: 'Parent Task 2', value: 'ParentTask2' },
-      { label: 'Parent Task 3', value: 'ParentTask3' },
-      { label: 'Parent Task 4', value: 'ParentTask4' },
-      { label: 'Parent Task 5', value: 'ParentTask5' },
-      { label: 'Parent Task 6', value: 'ParentTask6' },
-      { label: 'Parent Task 7', value: 'ParentTask7' },
-      { label: 'Parent Task 8', value: 'ParentTask8' },
-      { label: 'Parent Task 9', value: 'ParentTask9' },
-      { label: 'Parent Task 10', value: 'ParentTask10' }
-    ];
-
+    ];    
   }
 
   onRowEditInit(task: Task) {
@@ -68,6 +60,9 @@ export class ViewTableComponent implements OnInit {
   onRowEditSave(task: Task) {
     if (task.TaskName != "") {
       delete this.clonedTask[task.TaskID];
+
+      this.taskassignmentService.UpdateTask(task).subscribe(res=> console.log(res));
+
       console.log({ severity: 'success', summary: 'Success', detail: 'Car is updated' });
       console.log(task);
     }
@@ -86,9 +81,43 @@ export class ViewTableComponent implements OnInit {
     this.tasks[index] = this.clonedTask[task.TaskID];
     delete this.clonedTask[task.TaskID];
   }
-  taskSearch() {
-    this.taskassignmentService.getTask().subscribe((data: any) => {
-      this.tasks = data.data;
+
+  taskSearch() {    
+     let fromPriority : string = null;
+     let toPriority : string = null;
+     let startdate : string = null;
+     let endate :string = null;
+    if(this.priorityFromSearchTxt)
+    {
+      fromPriority = this.priorityFromSearchTxt.toString();
+    }
+
+    if(this.priorityToSearchTxt)
+    {
+      toPriority = this.priorityToSearchTxt.toString();
+    }
+
+    if(this.searchStartDate)
+    {
+      startdate = this.searchStartDate.toString();
+    }
+
+    if(this.searchEndDate)
+    {
+      endate = this.searchEndDate.toString();
+    }
+
+    let params = new HttpParams();
+       params = params.append('taskName', this.taskSearchTxt);
+       params = params.append('priorityFrom', fromPriority);
+       params = params.append('priorityTo', toPriority);
+       params = params.append('parentTaskName', this.parentTaskSearchTxt);
+       params = params.append('startDate', startdate);
+       params = params.append('endDate', endate);       
+
+    this.taskassignmentService.getTask(params).subscribe((data: Task[]) => {
+      console.log(data);
+      this.tasks = data;      
     });
   }
 
